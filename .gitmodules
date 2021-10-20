@@ -1,0 +1,3 @@
+[submodule "LEDApi"]
+	path = LEDApi
+	url = https://github.com/FastLED/FastLED.git
