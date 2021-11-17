@@ -1,11 +1,10 @@
 #include "FastLED.h"
-
 //LED LIGHTING SETUP
-#define LED_PIN     6
-#define NUM_LEDS    500
-#define BRIGHTNESS  50
-#define LED_TYPE    WS2811
-#define COLOR_ORDER GRB
+#define LED_PIN = 6
+#define NUM_LEDS = 500
+#define BRIGHTNESS = 50
+#define LED_TYPE = "WS2811"
+#define COLOR_ORDER = "GRB"
 
 CRGB tempLeds[NUM_LEDS];
 int scene;
@@ -48,14 +47,20 @@ public:
     // GETTER AND SETTER FOR SCENES
     void setScene(Scenes s) { scene = s; }
     Scenes getScene() { return scene; }
+    // SETS THE LEDS TO THE INPUT
+    void setLEDS(CRGB leds_in[NUM_LEDS]) {
+        for(int i = NUM_LEDS - 1; i >= 0; --i) {
+            led[i] = leds_in[i];
+        }
+    }
 
     // RAINBOW SCENE SPECIFIC FUNCTION
     void setK(int k_in) { k = k_in; }
 
-    /***** PUT METHODS FOR YOUR SCENE BELOW *****/
-
 private:
-    
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+     *              PUT METHODS FOR YOUR LIGHTS IMPLEMENTATION BELOW               *
+     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     // FUNCTION TO GENERATE COLOR BASED ON VIRTUAL WHEEL
     // https://github.com/NeverPlayLegit/Rainbow-Fader-FastLED/blob/master/rainbow.ino
     CRGB Scroll(int pos) {
@@ -90,11 +95,12 @@ private:
         FastLED.show(); 
     }
 
-    int k = 255;
+    // INSTANCE VARIABLES
     Scenes scene;
     CRGB leds[NUM_LEDS];
-}
-
+    // PUT WHATEVER VARIABLES YOU NEED DOWN HERE
+    int k = 255;
+};
 
 Lights leds;
 
@@ -109,22 +115,23 @@ void setup() {
         tempLeds[i] = CRGB(0, 0, 0);
 
     // INITIALIZE LEDS
-    leds(tempLeds)
+    leds.setLEDS(tempLeds);
     FastLED.show();
 }
 
 void loop() {
-    //CHECK DMX INPUT AND SET SCENE
-    //TODO: CHECK DMX INPUT FROM BOARD
+    // --- DO NOT CHANGE THIS ---
+    // CHECK DMX INPUT AND SET SCENE
+    // TODO: CHECK DMX INPUT FROM BOARD
     int dmxInput = 1;
     leds.setScene(dmxInput);
     leds.displayScene();
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-     *             PUT METHODS FOR YOUR LIGHTS IMPLEMENTATION BELOW                *
+     *            PUT FUNCTIONALITY FOR YOUR LIGHTS IMPLEMENTATION BELOW           *
      * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    //LOOP CODE TO MAKE RAINBOW WORK
-    if(leds.getScene()) {
+    // PUT WHAT YOU PUT IN THE ENUM HERE
+    if(leds.getScene() == RAINBOW) {  //LOOP CODE TO MAKE RAINBOW WORK
         k = k - wheel_speed; // SPEED OF COLOR WHEEL
         leds.setK(k);
         if (k < 0) // RESET COLOR WHEEL
